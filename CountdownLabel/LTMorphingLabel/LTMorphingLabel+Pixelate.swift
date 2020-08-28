@@ -28,7 +28,7 @@
 import UIKit
 
 extension LTMorphingLabel {
-
+    
     @objc
     func PixelateLoad() {
         
@@ -77,23 +77,27 @@ extension LTMorphingLabel {
     fileprivate func pixelateImageForCharLimbo(
         _ charLimbo: LTCharacterLimbo,
         withBlurRadius blurRadius: CGFloat
-        ) -> UIImage {
-            let scale = min(UIScreen.main.scale, 1.0 / blurRadius)
-            UIGraphicsBeginImageContextWithOptions(charLimbo.rect.size, false, scale)
-            let fadeOutAlpha = min(1.0, max(0.0, charLimbo.drawingProgress * -2.0 + 2.0 + 0.01))
-            let rect = CGRect(
-                x: 0,
-                y: 0,
-                width: charLimbo.rect.size.width,
-                height: charLimbo.rect.size.height
-            )
+    ) -> UIImage {
+        let scale = min(UIScreen.main.scale, 1.0 / blurRadius)
+        UIGraphicsBeginImageContextWithOptions(charLimbo.rect.size, false, scale)
+        let fadeOutAlpha = min(1.0, max(0.0, charLimbo.drawingProgress * -2.0 + 2.0 + 0.01))
+        let rect = CGRect(
+            x: 0,
+            y: 0,
+            width: charLimbo.rect.size.width,
+            height: charLimbo.rect.size.height
+        )
+        
+        if let font = self.font {
             String(charLimbo.char).draw(in: rect, withAttributes: [
-                .font: self.font,
+                .font: font,
                 .foregroundColor: self.textColor.withAlphaComponent(fadeOutAlpha)
             ])
-            let newImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return newImage!
+        }
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
     }
     
 }
